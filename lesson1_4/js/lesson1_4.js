@@ -21,7 +21,7 @@ s = 1000; //площадь участка 10 соток = 1000 метров
 x = 25; // длинна грядок
 y = 15; // ширина грядок
 
-let sMinimum = Math.sqrt(s - x * y);
+let sMinimum = Math.sqrt(s%(x * y);
 
 console.log("Осталось не занято " + sMinimum + "м2");
 
@@ -33,7 +33,7 @@ console.log("Осталось не занято " + sMinimum + "м2");
 let s1 = 15; // площадь первого овала в дм2
 let s2 = 600; // площадь второго овала в см
 
-sMinimum = s2 - 15 * 10;
+sMinimum = s2 - 15 * 100;
 
 console.log("Площадь овального кольца равна " + sMinimum + "cм2");
 
