@@ -90,11 +90,21 @@ console.log(resault);
 Создать таблицу соответствия между весом в фунтах и весом в килограммах для дначений от 1 до 10
 */
 
+var table = [];
+let funt = 1;
+while (funt <= 10) {
+    table[funt] = funt * 0.4536;
+    console.log(funt + " lb = " + table[funt] + "kg");
+    funt++;
+}
+
 /*
 Задание 3
 Посмотреть, как работают методы для работы с массивами: join, slice, indexOf/lastIndexOf, concat.
 Разобрать по 1му примену на каждый из них. В субботу обсудим
 */
+
+
 
 /*
 Задача 4
@@ -107,3 +117,22 @@ console.log(resault);
 Задача 5
 Создать массив из чисел. Выполнить сортировку массива по возрастанию методом пузырька. Запрещено использовать стандартные методы.
 */
+
+var arrNumber = [2,5,6,7,8,9,2,3,4,56,234,123,446,212,2143,544,212,1233,231,532,96,344,133];
+var i, i2;
+var test;
+for (i = arrNumber.length - 1; i > 1; i--) {
+    test = arrNumber[i];
+    
+    for (i2 = i; i2 > 1; i2--) {
+        
+        if (test < arrNumber[i2-1]) {
+            arrNumber[i] = arrNumber[i2-1];
+            arrNumber[i2-1] = test;
+            test = arrNumber[i];
+        }
+    }
+}
+
+console.log (arrNumber);
+
