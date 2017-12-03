@@ -265,11 +265,19 @@ console.log("%c%s","color:green;","Задача 2");
 /*
 2. Дано целое число n. Вычислите сумму его цифр. Использовать только рекурсию.
 */
-    var n = 23;
-    
+    var n = 5567;
+    var b = 0;
     function recurs(n) {
-        
-    }
+        if (n%10) {
+            b += n%10;
+            n -=n%10;
+            return recurs(n/10);
+            } else {
+                return n+b;
+            }
+        } 
+    
+    console.log(recurs(n));
     
 console.log("%c%s","color:green;","Задача 3");
 /*
