@@ -176,7 +176,7 @@ x = [1,4]; // вершина x по шкале[x,y]
 y = [1,2]; // вершина y по шкале[x,y]
 z = [3,4]; // вершина z по шкале[x,y]
 
-// рассчитаем длинну сторон по формуле ((X2-X1)²+(Y2-Y1)²)², потом определим угол применив теорему Пифагора
+// рассчитаем длинну сторон по формуле (X2-X1)²+(Y2-Y1)², потом определим угол применив теорему Пифагора
 
 let a = (x[0]-y[0])*(x[0]-y[0]) + (x[1]-y[1])*(x[1]-y[1]);
 let b = (x[0]-z[0])*(x[0]-z[0]) + (x[1]-z[1])*(x[1]-z[1]);
@@ -213,5 +213,66 @@ for (i = arrNumber.length - 1; i > 1; i--) {
     }
 }
 
-console.log (arrNumber);
+console.log(arrNumber);
 
+console.log("%c%s","color:green;","********** Домашнее задание №3 **********");
+//Продолжаем **** Домашнее задание №3 ****
+
+(function() {
+    'use_strict';
+    
+console.log("%c%s","color:green;","Задача 1");
+
+/*
+1.Написать функцию calc(a, b, operator), которая в зависимости от оператора будет складывать, умножать, вычитать или делить. 
+Не забывайте про проверку типа введенных данных, и про деление на 0 (на 0 делить нельзя)
+*/
+    var a = 25;
+    var b = 20;
+    var operator = "Вася"; // Вводи оператора
+    var allowOperator = ['Вася','Федя','Маша','Катя']; // Операторы имеющие доступ
+    
+    function calc(a, b, operator) {
+        if (!checkOperator(operator)) return "Введите другие данные";
+            if (typeof a === "number" && typeof b === "number") {
+                if (operator === allowOperator[0]) {
+                    return a + b;
+                } else if  (operator === allowOperator[1]) {
+                    return a - b;
+                } else if  (operator === allowOperator[2]) {
+                    return a * b;
+                } else if  (operator === allowOperator[3] && b) {
+                    return a / b;
+                } else {
+                    return "На ноль делить нельзя";
+                }
+            } else {
+                return "Введите число";
+            }
+    }
+    
+    function checkOperator(check) {
+        for (i = allowOperator.length-1; i >=0; i--) {
+            if (check === allowOperator[i]) {
+                console.log(allowOperator[i]);
+                return true;
+            }
+        }
+        console.log("У данного оператора нет доступа к вычислениям!")
+        return false;
+    }
+    
+    console.log(calc(a,b,operator));
+    
+console.log("%c%s","color:green;","Задача 2");
+/*
+2. Дано целое число n. Вычислите сумму его цифр. Использовать только рекурсию.
+*/
+    
+console.log("%c%s","color:green;","Задача 3");
+/*
+3. (на замыкание)
+Написать функцию, которая возвращает новую функцию, которая увеличивает/уменьшает переданное число на указанный при карировании шаг.
+*/
+    
+}())
