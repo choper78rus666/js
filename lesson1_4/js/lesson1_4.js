@@ -229,7 +229,7 @@ console.log("%c%s","color:green;","Задача 1");
 */
     var a = 25;
     var b = 20;
-    var operator = "Вася"; // Вводи оператора
+    var operator = "Вася"; // Ввод оператора, у каждого своя функция в вычислениях
     var allowOperator = ['Вася','Федя','Маша','Катя']; // Операторы имеющие доступ
     
     function calc(a, b, operator) {
@@ -252,12 +252,9 @@ console.log("%c%s","color:green;","Задача 1");
     }
     
     function checkOperator(check) {
-        for (i = allowOperator.length-1; i >=0; i--) {
-            if (check === allowOperator[i]) {
-                console.log(allowOperator[i]);
+            if (allowOperator.indexOf(check) > -1) {
                 return true;
             }
-        }
         console.log("У данного оператора нет доступа к вычислениям!")
         return false;
     }
@@ -268,6 +265,11 @@ console.log("%c%s","color:green;","Задача 2");
 /*
 2. Дано целое число n. Вычислите сумму его цифр. Использовать только рекурсию.
 */
+    var n = 23;
+    
+    function recurs(n) {
+        
+    }
     
 console.log("%c%s","color:green;","Задача 3");
 /*
