@@ -291,13 +291,13 @@ console.log("%c%s","color:green;","Задача 3");
 3. (на замыкание)
 Написать функцию, которая возвращает новую функцию, которая увеличивает/уменьшает переданное число на указанный при карировании шаг.
 */
-    function carry(a, b) {
+    function carry(a) {
         return function (step) {
             return a + step;
         };
     }
     
-    var carrView = carry(5); // присвоили функцию с шагом (шаг)
+    var carrView = carry(3); // присвоили функцию с шагом (шаг)
     console.log(carrView(4));
     
 }())
