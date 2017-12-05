@@ -300,4 +300,19 @@ console.log("%c%s","color:green;","Задача 3");
     var carrView = carry(3); // присвоили функцию с шагом (шаг)
     console.log(carrView(4));
     
+//Пример с присвоением функции в качестве аргумента.
+    
+    function curryFunc (fun, a) {
+        return function(b) {
+            return fun(b, a); //здесь произойдет вызов функции fun
+        };
+    }
+    
+    function minus (a, b) {
+        return a-b;
+    }
+    
+    var curryPrime = curryFunc(minus, 1);// присваиваем функцию или метод в качестве аргумента
+    console.log(curryPrime(5));
+    console.log(curryPrime(8));
 }())
