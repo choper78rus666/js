@@ -57,8 +57,14 @@ erase
 Проверьте, чтобы методы действительно отрабатывали. Во вторник будем делать из этого мини paint. Но можете попробовать реализовать его сами до вторника (надо будет почитать про рисование canvas)
 */
     
-    var canvas = document.getElementsByTagName("canvas")[0],
-    point = canvas.getContext('2d');
+    var size = 2,
+        color = document.getElementById("paint_brush_color"),
+        brush = document.getElementById("paint_brush"),
+        erase = document.getElementById("paint_eraser"),
+        getSize = document.getElementById("paint_brush_size"),
+        canvas = document.getElementsByTagName("canvas")[0],
+        point = canvas.getContext('2d');
+        
     canvas.height = 560;
     canvas.width  = 800;
     
@@ -66,27 +72,45 @@ erase
         startDraw: function(event){
             console.log("mousedown");
             console.log(event.pageX, event.pageY);
-            point.fillRect(event.pageX-10, event.pageY-50,3,3);
+            this.draw_active = true;
         },
         endDraw: function(){
             console.log("mouseout");
+            this.draw_active = false;
         },
         drawing: function(){
+            if(this.draw_active) {
+                point.fillRect(event.pageX-10, event.pageY-50, size, size);
+            }
             console.log("mousemove");
         },
         erase: function(){
             console.log("mouseup");
+            point.fillStyle = "#fff";
         },
+            getValues: function(){
+            point.fillStyle = color.value;
+        },
+            setSize: function(){
+            size = getSize.value;
+        },
+        
     };
     
    
     
     canvas.addEventListener("mousedown", handlers.startDraw);
-    canvas.addEventListener("mouseup", handlers.erase);
+    canvas.addEventListener("mouseup", handlers.endDraw);
     canvas.addEventListener("mouseout", handlers.endDraw);
     canvas.addEventListener("mousemove", handlers.drawing);
     
+    color.addEventListener("mouseout", handlers.getValues);
+    brush.addEventListener("mouseup", handlers.getValues);
+    erase.addEventListener("mouseup", handlers.erase);
+    getSize.addEventListener("mouseup", handlers.setSize);
     
+    
+   
     
     
     
