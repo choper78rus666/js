@@ -7,32 +7,38 @@
 */
     var slider = {
         init: function(id) {
-            var idElem = document.getElementById(id);
-            return idElem;
+            this.idElem = document.getElementById(id);
         },
         add: function(url, alt) {
-            var pElem = document.createElement("img"); // создает тег (элемент)
-            pElem.setAttribute("src", url);
-            pElem.setAttribute("alt", alt);
-            pElem.classList.add("slide");
-            pElem.style.backgroundSize = "cover";
-            pElem.style.width = "700px";
-            pElem.style.height ="300px";
-            this.init("slider").appendChild(pElem);
+            this.pElem = document.createElement("img"); // создает тег (элемент)
+            this.pElem.setAttribute("src", url);
+            this.pElem.setAttribute("alt", alt);
+            this.pElem.classList.add("slide");
+            this.pElem.style.backgroundSize = "cover";
+            this.pElem.style.width = "700px";
+            this.pElem.style.height ="300px";
+            this.init("slider");
+            this.idElem.remove();
+            this.idElem = document.createElement('div');
+            this.idElem.setAttribute("id", "slider");
+            document.body.appendChild(this.idElem);
+            this.idElem.appendChild(this.pElem);
+            
+        },
+        goSlider: function() {
+        this.image = [["images/cat1.jpg", "slide1"], ["images/cat2.jpg", "slide2"], ["images/cat3.jpg", "slide3"], ["images/cat4.jpg", "slide4"]];
+        n++;
+        if(n >= this.image.length) n=0;
+        slider.add(this.image[n][0], this.image[n][1]);
         },
     }
     
     var n = 0;
-    goSlider();
-    setInterval(goSlider, 2000);
+    slider.goSlider();
+    setInterval(slider.goSlider, 2000);
    
     
-    function goSlider(){
-        var image = [["images/cat1.jpg", "slide1"], ["images/cat2.jpg", "slide2"], ["images/cat3.jpg", "slide3"], ["images/cat4.jpg", "slide4"]];
-        n++;
-        if(n >= image.length) n=0;
-        slider.add(image[n][0], image[n][1]);
-    }
+    
     
     
 })()
