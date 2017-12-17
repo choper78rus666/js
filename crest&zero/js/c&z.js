@@ -2,16 +2,23 @@
     'use strict';
     
     function Game(){
-        function startGame(){
+        this.players = [];
+        this.max_players = 2;
+        
+        this.startGame = function(){
             
         };
         
-        function finish(){
+        this.finish = function(){
             
         };
         
-        function initPlayers(){
-        this.player = new Player();
+        this.initPlayers(player) = function(){
+            if(this.max_players > this.players.length){
+                this.players.push(player);
+            } else {
+                return false;
+            }
         };
     }
 
