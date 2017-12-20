@@ -12,7 +12,7 @@
     key.addEventListener("keydown", keydownFunc);
     
     function keydownFunc(event) {
-        console.log("keydown", this);
+        console.log("keydown", event.key);
         write_text.innerHTML += event.key;
     }
     

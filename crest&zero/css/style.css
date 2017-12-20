@@ -1,0 +1,43 @@
+body {
+    background: lightgray;
+}
+
+div {
+    clear: both;
+}
+
+form {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background: #43bf43;
+    border: 5px solid #f5f500;
+    border-radius: 6px;
+    width: 400px;
+    height: 100px;
+    padding: 40px;
+    font-weight: bold;
+}
+
+.hide {
+    display: none;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.center {
+    width: 100px;
+    margin: 0 auto;
+}
+
+#size {
+    text-align: center;
+    width: 160px;
+}
