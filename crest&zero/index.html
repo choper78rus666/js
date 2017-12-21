@@ -6,31 +6,33 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <form id="start-info" method="post">
-            <div>
-                <label class="left" for="name1">Введите имя первого игрока</label>
-                <input class="right" id="name1" type="text" maxlength="20">
-            </div>
-            <div>
-                <label class="left" for="set-col">Размер поля<div id="size" class="right">3 X 3</div></label>
-                <input class="left"  id="set-col" type="range" min="3" max="15" value="3">
-            </div>
-            <div id="checkplayer">
-                <label>Тип игры</label>
-                <label><input id="set-player2" type="radio" name="pvp" checked>Player vs Player</label>
-                <label><input id="set-player1" type="radio" name="pvp">Player vs Computer</label>
-            </div>
-            <div id="player2" class="">
-                <label class="left" for="name2">Введите имя второго игрока</label>
-                <input class="right" id="name2" type="text" maxlength="20">
+        <div id="content">
+            <form id="start-info" method="post">
+                <div>
+                    <label class="left" for="name1">Введите имя первого игрока</label>
+                    <input class="right" id="name1" type="text" maxlength="20">
+                </div>
+                <div>
+                    <label class="left" for="set-col">Размер поля<div id="size" class="right">3 X 3</div></label>
+                    <input class="left"  id="set-col" type="range" min="3" max="15" value="3">
+                </div>
+                <div id="checkplayer">
+                    <label>Тип игры</label>
+                    <label><input id="set-player2" type="radio" name="pvp" checked>Player vs Player</label>
+                    <label><input id="set-player1" type="radio" name="pvp">Player vs Computer</label>
+                </div>
+                <div id="player2" class="">
+                    <label class="left" for="name2">Введите имя второго игрока</label>
+                    <input class="right" id="name2" type="text" maxlength="20">
+                    <br>
+                </div>
                 <br>
-            </div>
-            <br>
-            <div class="center">
-                <input id="button" type="button" value="Начать игру">
-            </div>
-            <div id="error"></div>
-        </form>
+                <div class="center">
+                    <input id="button" type="button" value="Начать игру">
+                </div>
+                <div id="error"></div>
+            </form>
+        </div>
         <div id="table">
         </div>
         <script src="js/c&z.js"></script>
