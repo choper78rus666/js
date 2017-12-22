@@ -41,3 +41,48 @@ form {
     text-align: center;
     width: 160px;
 }
+
+#table {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background: #eaeaea;
+    border: 5px solid lightblue;
+    border-radius: 6px;
+    width: 400px;
+    height: 400px;
+    padding: 30px;
+    font-weight: bold;
+}
+
+#playername1,
+#playername2,
+#symbol1,
+#symbol2 {
+    display: inline-block;
+    width: 197px;
+    text-align: center;
+}
+
+#table-field {
+    position: absolute;
+    box-sizing: content-box;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background: #eaeaea;
+    border: 1px solid lightblue;
+    width: 300px;
+    height: 300px;
+    font-weight: bold;
+}
+
+.col {
+    box-sizing: border-box;
+    border: 1px solid lightblue;
+    font-weight: bold;
+    text-align: center;
+    float: left;
+    clear: none;
+}

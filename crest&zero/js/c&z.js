@@ -16,7 +16,8 @@
         this.startGame = function(){
             console.log("Развертка сетки и старт");
             this.setStat(1);
-            htmlControl.hideUnhideForm();
+            htmlControl.hideUnhideForm("start-info");
+            htmlControl.hideUnhideForm("table");
             if(player2.getName()){
                 console.log("2 игрока");
             } else {
@@ -94,6 +95,7 @@
         this.updateField = function(n){
             this.size = n;
             table = [[],[]];
+            htmlControl.fieldUpdate(n);
             console.log("создана таблица ",n," на ", n);
         };
     }
@@ -111,11 +113,14 @@
                 alert("Нужно заполнить все поля!");
             } else {
                 player1.setName(checkInput("name1").value);
+                checkInput("playername1").innerHTML = player1.getName();
                 if(checkInput("set-player2").checked){
                     player2.setName(checkInput("name2").value);
+                    checkInput("playername2").innerHTML = player2.getName();
                 } else {
                     // если игра с компьютером
                     player2.setName(null);
+                    checkInput("playername2").innerHTML = "Компьютер";
                 }
                 
                 table.updateField(checkInput("set-col").value)
@@ -137,21 +142,32 @@
             }
         };
         
-        this.hideUnhideForm = function(){
-            if(game.getStat){
-                this.form = checkInput("start-info");
-                this.form.classList.add("hide");
-                checkInput("start-info").innerHTML = this.form.innerHTML;
-            } else {
-                this.form = checkInput("start-info");
-                this.form.classList.remove("hide");
-                checkInput("start-info").innerHTML = this.form.innerHTML;
-            }
+        this.hideUnhideForm = function(id){
+                this.form = checkInput(id);
+                this.form.classList.toggle("hide");
+                checkInput(id).innerHTML = this.form.innerHTML;
         };
         
         this.tableSize = function(){
              checkInput("size").innerHTML = checkInput("set-col").value + " X " +checkInput("set-col").value;
-        }
+        };
+        
+        this.fieldUpdate = function(n){
+            this.field = checkInput("table-field");
+            for(let next = 0; next < n; next++){
+                let i = 0;
+                while(i < n){
+                    this.elemDiv = document.createElement('div');
+                    
+                    this.elemDiv.classList.add("col");
+                    this.elemDiv.style.height = 300/n + "px";
+                    this.elemDiv.style.width = 300/n + "px";
+                    this.elemDiv.setAttribute("id","pos" + next + i);
+                    this.field.appendChild(this.elemDiv);
+                    i++
+                }
+            }
+        };
         
     }
    
