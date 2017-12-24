@@ -61,8 +61,10 @@ form {
 #symbol1,
 #symbol2 {
     display: inline-block;
-    width: 197px;
+    min-width: 197px;
     text-align: center;
+    font-weight: bold;
+    font-family: cursive;
 }
 
 #table-field {
@@ -72,7 +74,7 @@ form {
     top: 50%;
     transform: translate(-50%,-50%);
     background: #eaeaea;
-    border: 1px solid lightblue;
+/*    border: 1px solid lightblue;*/
     width: 300px;
     height: 300px;
     font-weight: bold;
@@ -85,4 +87,18 @@ form {
     text-align: center;
     float: left;
     clear: none;
+    line-height: .74;
+    font-family: cursive;
+    cursor: context-menu;
+}
+
+#game-info {
+    position: absolute;
+    top: 400px;
+    left:50%;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-family: cursive;
+    margin-left: -50%;
 }

@@ -3,7 +3,7 @@
     
     function Game(){
 //        this.max_players = 2;
-        var status = 0;
+        var status = -1;
         
         this.setStat = function(stat){
             status = stat;
@@ -13,16 +13,26 @@
             return status;
         };
         
+        this.nextStep = function(){
+            status = 1 !== status ? 1 : -1;
+            this.str = "Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName());
+            console.log("Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName()));
+            htmlControl.gameInfo(this.str);
+        };
+        
         this.startGame = function(){
             console.log("Развертка сетки и старт");
-            this.setStat(1);
             htmlControl.hideUnhideForm("start-info");
             htmlControl.hideUnhideForm("table");
+            htmlControl.hideUnhideForm("table-field");
             if(player2.getName()){
                 console.log("2 игрока");
             } else {
+                player2.setName("Компьютер")
                 console.log("1 игрок");
             }
+            
+            this.nextStep();
         };
         
         this.finish = function(){
@@ -37,8 +47,11 @@
 //            }
 //        };
         
+        // Запуск игры
         this.initGame = function(){
             if (htmlControl.checkForm()){ 
+                player1.setSymb(1);
+                player2.setSymb(-1);
                 game.startGame();
             } else {
                 console.log("EROR");
@@ -67,7 +80,10 @@
             score = add_score;
         };
         
-        this.getSymb = function(){
+        this.getSymb = function(sym){
+            if(sym && sym !== symbol){
+                return false;
+            }
             return symbol;
         };
         
@@ -78,52 +94,60 @@
     }
 
     function Table(){
-        var table = [[],[]];
+        var arrtable = [];
+        this.size = null;
         
-        this.getTable = function(tablex, tabley){
-            if(!table[tablex][tabley]) {
-                return false;
-            } else {
-                return table[tablex][tabley];
+        this.getTable = function(row, col){
+            console.log(row, col," ",arrtable[parseInt(row)][parseInt(col)]);
+                return arrtable[parseInt(row)][parseInt(col)];
+        };
+        
+        this.setTable = function(row, col, symbol){
+            arrtable[parseInt(row)][parseInt(col)] = symbol;
+        };
+        
+        this.setSize = function(size){
+            this.size = size;
+        };
+        
+        this.getSize = function(){
+            return this.size;
+        }
+        
+        this.updateField = function(){
+            for(let i = 0; i < this.getSize(); i++){
+                arrtable[i] = new Array(this.getSize()-1);
             }
-        };
-        
-        this.setTable = function(tablex, tabley, symbol){
-            table[tablex][tabley] = symbol;
-        };
-        
-        this.updateField = function(n){
-            this.size = n;
-            table = [[],[]];
-            htmlControl.fieldUpdate(n);
-            console.log("создана таблица ",n," на ", n);
+            
+            htmlControl.fieldUpdate();
+            console.log("создана таблица ", this.getSize(), " на ", this.getSize());
         };
     }
     
     function HtmlController(){
         
-        var checkInput = function(id){
+        var getId = function(id){
             return document.getElementById(id);
         };
-        this.checkInput = checkInput;
+        this.getId = getId;
             
         this.checkForm = function (){
             
-            if((!checkInput("name1").value.length) || (checkInput("set-player2").checked && !checkInput("name2").value.length)){ 
+            if((!getId("name1").value.length) || (getId("set-player2").checked && !getId("name2").value.length)){ 
                 alert("Нужно заполнить все поля!");
             } else {
-                player1.setName(checkInput("name1").value);
-                checkInput("playername1").innerHTML = player1.getName();
-                if(checkInput("set-player2").checked){
-                    player2.setName(checkInput("name2").value);
-                    checkInput("playername2").innerHTML = player2.getName();
+                player1.setName(getId("name1").value);
+                getId("playername1").innerHTML = player1.getName();
+                if(getId("set-player2").checked){
+                    player2.setName(getId("name2").value);
+                    getId("playername2").innerHTML = player2.getName();
                 } else {
                     // если игра с компьютером
                     player2.setName(null);
-                    checkInput("playername2").innerHTML = "Компьютер";
+                    getId("playername2").innerHTML = "Компьютер";
                 }
                 
-                table.updateField(checkInput("set-col").value)
+                table.updateField(getId("set-col").value);
                 
                 return true;
             }
@@ -131,42 +155,72 @@
         };
         
         this.checkPlayer = function(){
-            if(checkInput("set-player1").checked){
-               this.elem = checkInput("player2");
+            if(getId("set-player1").checked){
+               this.elem = getId("player2");
                 this.elem.classList.add("hide");
-                checkInput("player2").innerHTML = this.elem.innerHTML;
-            } else if(checkInput("set-player2").checked){
-                this.elem = checkInput("player2");
+                getId("player2").innerHTML = this.elem.innerHTML;
+            } else if(getId("set-player2").checked){
+                this.elem = getId("player2");
                 this.elem.classList.remove("hide");
-                checkInput("player2").innerHTML = this.elem.innerHTML;
+                getId("player2").innerHTML = this.elem.innerHTML;
             }
         };
         
         this.hideUnhideForm = function(id){
-                this.form = checkInput(id);
+                this.form = getId(id);
                 this.form.classList.toggle("hide");
-                checkInput(id).innerHTML = this.form.innerHTML;
+                getId(id).innerHTML = this.form.innerHTML;
         };
         
         this.tableSize = function(){
-             checkInput("size").innerHTML = checkInput("set-col").value + " X " +checkInput("set-col").value;
+            getId("size").innerHTML = getId("set-col").value + " X " +getId("set-col").value;
+            table.setSize(getId("set-col").value);
         };
         
-        this.fieldUpdate = function(n){
-            this.field = checkInput("table-field");
-            for(let next = 0; next < n; next++){
-                let i = 0;
-                while(i < n){
-                    this.elemDiv = document.createElement('div');
-                    
-                    this.elemDiv.classList.add("col");
-                    this.elemDiv.style.height = 300/n + "px";
-                    this.elemDiv.style.width = 300/n + "px";
-                    this.elemDiv.setAttribute("id","pos" + next + i);
-                    this.field.appendChild(this.elemDiv);
-                    i++
+        this.fieldUpdate = function(){
+            for(let row = 0; row < table.getSize(); row++){
+                let col = 0;
+                while(col < table.getSize()){
+                    this.setDiv(row, col, 0);
+                    table.setTable(row, col, 0);
+                    col++;
                 }
             }
+        };
+        
+        this.setDiv = function(row, col, symb){
+            if(symb === 0){
+                this.elemDiv = document.createElement('div');
+                this.elemDiv.classList.add("col");
+                this.elemDiv.style.height = 300/table.getSize() + "px";
+                this.elemDiv.style.width = 300/table.getSize() + "px";
+                this.elemDiv.style.fontSize = 270/table.getSize() + "pt";
+                this.elemDiv.setAttribute("id", "" + (row < 10 ? "0"+row : row) + (col < 10 ? "0"+col : col));
+                getId("table-field").appendChild(this.elemDiv);
+            } else if(symb === 1) {
+                getId(row + col).innerHTML = "X";
+                table.setTable(row,col, 1);
+            } else {
+                getId(row + col).innerHTML = "O";
+                table.setTable(row,col, -1);
+            }
+        };
+        
+        //var setDiv = this.setDiv;
+        this.setPosition = function(event){
+            console.log(event.target.id[0]+event.target.id[1]+event.target.id[2]+event.target.id[3]);
+            this.row = event.target.id[0]+event.target.id[1]
+            this.col = event.target.id[2]+event.target.id[3];
+            
+            if(!table.getTable(this.row, this.col)){
+                htmlControl.setDiv(this.row, this.col, game.getStat());
+                game.nextStep();
+                console.log("put");
+            }
+        };
+        
+        this.gameInfo = function(str){
+            getId("game-info").innerHTML = str;
         };
         
     }
@@ -178,11 +232,14 @@
     var table = new Table();
     
     //обработчик формы
-    htmlControl.checkInput("button").addEventListener("click", game.initGame);
-    htmlControl.checkInput("checkplayer").addEventListener("click", htmlControl.checkPlayer);
-    htmlControl.checkInput("set-col").addEventListener("mousemove", htmlControl.tableSize);
-    htmlControl.checkInput("set-col").addEventListener("keyup", htmlControl.tableSize);
-    htmlControl.checkInput("set-col").addEventListener("click", htmlControl.tableSize);
+    htmlControl.getId("button").addEventListener("click", game.initGame);
+    htmlControl.getId("checkplayer").addEventListener("click", htmlControl.checkPlayer);
+    htmlControl.getId("set-col").addEventListener("mousemove", htmlControl.tableSize);
+    htmlControl.getId("set-col").addEventListener("keyup", htmlControl.tableSize);
+    htmlControl.getId("set-col").addEventListener("click", htmlControl.tableSize);
+    
+    //обработчик таблицы
+    htmlControl.getId("table-field").addEventListener("click", htmlControl.setPosition);
     
     
 }());
