@@ -4,6 +4,7 @@
     function Game(){
 //        this.max_players = 2;
         var status = -1;
+        var step = 0;
         
         this.setStat = function(stat){
             status = stat;
@@ -14,10 +15,18 @@
         };
         
         this.nextStep = function(){
-            status = 1 !== status ? 1 : -1;
-            this.str = "Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName());
-            console.log("Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName()));
-            htmlControl.gameInfo(this.str);
+            console.log("step",step);
+            if(step < (table.getSize()*table.getSize())){
+                status = 1 !== status ? 1 : -1;
+                this.str = "Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName());
+                console.log("Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName()));
+                htmlControl.gameInfo(this.str);
+                step++;
+               } else {
+                   htmlControl.gameInfo("Победила дружба!");
+                   this.finish();
+               }
+            
         };
         
         this.startGame = function(){
@@ -37,6 +46,10 @@
         
         this.finish = function(){
             
+        };
+        
+        this.getWin = function(row, col, symb){
+            return true;
         };
         
 //        this.initPlayers = function(player){
@@ -199,10 +212,12 @@
                 getId("table-field").appendChild(this.elemDiv);
             } else if(symb === 1) {
                 getId(row + col).innerHTML = "X";
-                table.setTable(row,col, 1);
+                table.setTable(row, col, 1);
+                game.getWin(row, col, 1);
             } else {
                 getId(row + col).innerHTML = "O";
-                table.setTable(row,col, -1);
+                table.setTable(row, col, -1);
+                game.getWin(row, col, 1);
             }
         };
         
