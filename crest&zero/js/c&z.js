@@ -2,8 +2,10 @@
     'use strict';
     
     function Game(){
-//        this.max_players = 2;
-        var status = -1;
+        this.player1 = new Player();
+        this.player2 = new Player();
+        this.table = new Table();
+        var status = 1;
         var step = 0;
         
         this.setStat = function(stat){
@@ -16,10 +18,9 @@
         
         this.nextStep = function(){
             console.log("step",step);
-            if(step < (table.getSize()*table.getSize())){
-                status = 1 !== status ? 1 : -1;
-                this.str = "Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName());
-                console.log("Ходит " + (player1.getSymb(status) ? player1.getName() : player2.getName()));
+            if(step < (this.table.getSize()*this.table.getSize())){
+                status = -1 !== status ? -1 : 1;
+                this.str = "Ходит " + this.playerGetNameSymbol(status*-1);
                 htmlControl.gameInfo(this.str);
                 step++;
                } else {
@@ -34,10 +35,10 @@
             htmlControl.hideUnhideForm("start-info");
             htmlControl.hideUnhideForm("table");
             htmlControl.hideUnhideForm("table-field");
-            if(player2.getName()){
+            if(this.player2.getName()){
                 console.log("2 игрока");
             } else {
-                player2.setName("Компьютер")
+                this.player2.setName("Компьютер")
                 console.log("1 игрок");
             }
             
@@ -45,30 +46,91 @@
         };
         
         this.finish = function(){
-            
+            htmlControl.getId("table-field").removeEventListener("click", htmlControl.setPosition);
         };
         
         this.getWin = function(row, col, symb){
-            return true;
+            let win = 0;
+            for(let i = 0; i < this.table.getSize() ; i++)
+                {
+                    win += symb === this.table.arrtable[i][parseInt(col)] ? symb : win = 0;
+                    console.log("win",win," this.table.arrtable[i, parseInt(col)]",this.table.arrtable[i][ parseInt(col)], " symb ",symb," this.table.getSize() ",parseInt(this.table.getSize()));
+                    if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                        htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                        this.finish();
+                    }
+                }
+            
+            win = 0;
+            for(let i = 0; i < this.table.getSize() ; i++)
+                {
+                    win += symb === this.table.arrtable[parseInt(row)][i] ? symb : win = 0;
+                    console.log("win",win," this.table.arrtable[i, parseInt(col)]",this.table.arrtable[i][ parseInt(col)], " symb ",symb," this.table.getSize() ",parseInt(this.table.getSize()));
+                    if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                        htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                        this.finish();
+                    }
+                }
+            win = 0;
+            for(let i = 0; i < 5 ; i++)
+                {   
+                    if(parseInt(col)+i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
+                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)+i] ? symb : win = 0;
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                            this.finish();
+                        }
+                    }
+                }
+            win = 0;
+            for(let i = 0; i < 5 ; i++)
+                {   
+                    if(parseInt(col)-i >= 0 && parseInt(row)-i >= 0){
+                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)-i] ? symb : win = 0;
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                            this.finish();
+                        }
+                    }
+                }
+            
+            win = 0;
+            for(let i = 0; i < 5 ; i++)
+                {   
+                    if(parseInt(col)-i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
+                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)-i] ? symb : win = 0;
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                            this.finish();
+                        }
+                    }
+                }
+            win = 0;
+            for(let i = 0; i < 5 ; i++)
+                {   
+                    if(parseInt(col)+i >= 0 && parseInt(row)-i >= 0){
+                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)+i] ? symb : win = 0;
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                            this.finish();
+                        }
+                    }
+                }
         };
-        
-//        this.initPlayers = function(player){
-//            if(this.max_players > this.players.length){
-//                this.players.push(player);
-//            } else {
-//                return false;
-//            }
-//        };
         
         // Запуск игры
         this.initGame = function(){
             if (htmlControl.checkForm()){ 
-                player1.setSymb(1);
-                player2.setSymb(-1);
+                game.player1.setSymb(1);
+                game.player2.setSymb(-1);
                 game.startGame();
             } else {
                 console.log("EROR");
             }
+        };
+        
+        this.playerGetNameSymbol = function(symb){
+            return (this.player1.getSymb(symb) ? this.player1.getName() : this.player2.getName());
         };
     }
 
@@ -77,7 +139,7 @@
         var score = 0;
         var symbol = null;
         
-        this.getName = function(){
+        this.getName = function(symb){
             return name;
         };
         
@@ -107,16 +169,19 @@
     }
 
     function Table(){
-        var arrtable = [];
+        this.arrtable = [];
         this.size = null;
         
         this.getTable = function(row, col){
-            console.log(row, col," ",arrtable[parseInt(row)][parseInt(col)]);
-                return arrtable[parseInt(row)][parseInt(col)];
+            console.log(row, col," ",this.arrtable[parseInt(row)][parseInt(col)]);
+                return this.arrtable[parseInt(row)][parseInt(col)];
         };
         
         this.setTable = function(row, col, symbol){
-            arrtable[parseInt(row)][parseInt(col)] = symbol;
+            this.arrtable[parseInt(row)][parseInt(col)] = symbol;
+            if(symbol){
+                game.getWin(row, col, symbol);
+            }
         };
         
         this.setSize = function(size){
@@ -129,7 +194,7 @@
         
         this.updateField = function(){
             for(let i = 0; i < this.getSize(); i++){
-                arrtable[i] = new Array(this.getSize()-1);
+                this.arrtable[i] = new Array(this.getSize()-1);
             }
             
             htmlControl.fieldUpdate();
@@ -149,18 +214,18 @@
             if((!getId("name1").value.length) || (getId("set-player2").checked && !getId("name2").value.length)){ 
                 alert("Нужно заполнить все поля!");
             } else {
-                player1.setName(getId("name1").value);
-                getId("playername1").innerHTML = player1.getName();
+                game.player1.setName(getId("name1").value);
+                getId("playername1").innerHTML = game.player1.getName();
                 if(getId("set-player2").checked){
-                    player2.setName(getId("name2").value);
-                    getId("playername2").innerHTML = player2.getName();
+                    game.player2.setName(getId("name2").value);
+                    getId("playername2").innerHTML = game.player2.getName();
                 } else {
                     // если игра с компьютером
-                    player2.setName(null);
+                    game.player2.setName(null);
                     getId("playername2").innerHTML = "Компьютер";
                 }
                 
-                table.updateField(getId("set-col").value);
+                game.table.updateField(getId("set-col").value);
                 
                 return true;
             }
@@ -187,15 +252,15 @@
         
         this.tableSize = function(){
             getId("size").innerHTML = getId("set-col").value + " X " +getId("set-col").value;
-            table.setSize(getId("set-col").value);
+            game.table.setSize(getId("set-col").value);
         };
         
         this.fieldUpdate = function(){
-            for(let row = 0; row < table.getSize(); row++){
+            for(let row = 0; row < game.table.getSize(); row++){
                 let col = 0;
-                while(col < table.getSize()){
+                while(col < game.table.getSize()){
                     this.setDiv(row, col, 0);
-                    table.setTable(row, col, 0);
+                    game.table.setTable(row, col, 0);
                     col++;
                 }
             }
@@ -205,31 +270,30 @@
             if(symb === 0){
                 this.elemDiv = document.createElement('div');
                 this.elemDiv.classList.add("col");
-                this.elemDiv.style.height = 300/table.getSize() + "px";
-                this.elemDiv.style.width = 300/table.getSize() + "px";
-                this.elemDiv.style.fontSize = 270/table.getSize() + "pt";
+                this.elemDiv.style.height = 300/game.table.getSize() + "px";
+                this.elemDiv.style.width = 300/game.table.getSize() + "px";
+                this.elemDiv.style.fontSize = 270/game.table.getSize() + "pt";
                 this.elemDiv.setAttribute("id", "" + (row < 10 ? "0"+row : row) + (col < 10 ? "0"+col : col));
                 getId("table-field").appendChild(this.elemDiv);
             } else if(symb === 1) {
                 getId(row + col).innerHTML = "X";
-                table.setTable(row, col, 1);
-                game.getWin(row, col, 1);
+                game.table.setTable(row, col, 1);
+                //game.getWin(row, col, 1);
             } else {
                 getId(row + col).innerHTML = "O";
-                table.setTable(row, col, -1);
-                game.getWin(row, col, 1);
+                game.table.setTable(row, col, -1);
+                //game.getWin(row, col, -1);
             }
         };
         
-        //var setDiv = this.setDiv;
         this.setPosition = function(event){
             console.log(event.target.id[0]+event.target.id[1]+event.target.id[2]+event.target.id[3]);
             this.row = event.target.id[0]+event.target.id[1]
             this.col = event.target.id[2]+event.target.id[3];
             
-            if(!table.getTable(this.row, this.col)){
-                htmlControl.setDiv(this.row, this.col, game.getStat());
+            if(!game.table.getTable(this.row, this.col)){
                 game.nextStep();
+                htmlControl.setDiv(this.row, this.col, game.getStat());
                 console.log("put");
             }
         };
@@ -240,11 +304,9 @@
         
     }
    
-    var player1 = new Player();
-    var player2 = new Player();
+    
     var game = new Game();
     var htmlControl = new HtmlController();
-    var table = new Table();
     
     //обработчик формы
     htmlControl.getId("button").addEventListener("click", game.initGame);
