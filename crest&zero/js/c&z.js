@@ -78,25 +78,27 @@
                         this.finish();
                     }
                 }
+            
             win = 0;
-            for(let i = 0; i < 5 ; i++)
+            for(let i = 1; i < 5 ; i++)
                 {   
                     if(parseInt(col)+i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
-                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)+i] ? symb : - win;
+                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)+i] ? symb : 0;
                         console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                        if (this.table.arrtable[parseInt(row)+i][parseInt(col)+i] !== symb) break;
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
                         }
                     }
                 }
-            win = 0;
-            for(let i = 0; i < 5 ; i++)
+            
+            for(let i = 1; i < 5 ; i++)
                 {   
                     if(parseInt(col)-i >= 0 && parseInt(row)-i >= 0){
                         win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)-i] ? symb : - win;
                         console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
                         }
@@ -104,24 +106,25 @@
                 }
             
             win = 0;
-            for(let i = 0; i < 5 ; i++)
+            for(let i = 1; i < 5 ; i++)
                 {   
-                    if(parseInt(col)-i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
-                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)-i] ? symb : - win;
+                    if(parseInt(col)-i >= 0 && parseInt(row)+i < parseInt(this.table.getSize())){
+                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)-i] ? symb : 0;
+                        if(this.table.arrtable[parseInt(row)+i][parseInt(col)-i] !== symb) break;
                         console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
                         }
                     }
                 }
-            win = 0;
-            for(let i = 0; i < 5 ; i++)
+            
+            for(let i = 1; i < 5 ; i++)
                 {   
-                    if(parseInt(col)+i >= 0 && parseInt(row)-i >= 0){
+                    if(parseInt(col)+i < parseInt(this.table.getSize()) && parseInt(row)-i >= 0){
                         win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)+i] ? symb : - win;
                         console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
+                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
                         }
