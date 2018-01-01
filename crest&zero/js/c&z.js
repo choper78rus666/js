@@ -5,7 +5,7 @@
         this.player1 = new Player();
         this.player2 = new Player();
         this.table = new Table();
-        var status = 1;
+        var status = -1;
         var step = 0;
         
         this.setStat = function(stat){
@@ -19,8 +19,8 @@
         this.nextStep = function(){
             console.log("step",step);
             if(step < (this.table.getSize()*this.table.getSize())){
-                status = -1 !== status ? -1 : 1;
-                this.str = "Ходит " + this.playerGetNameSymbol(status*-1);
+                status = 1 !== status ? 1 : -1;
+                this.str = "Ходит " + this.playerGetNameSymbol(status);
                 htmlControl.gameInfo(this.str);
                 step++;
                } else {
@@ -35,10 +35,9 @@
             htmlControl.hideUnhideForm("start-info");
             htmlControl.hideUnhideForm("table");
             htmlControl.hideUnhideForm("table-field");
-            if(this.player2.getName()){
+            if(!this.player2.getPc()){
                 console.log("2 игрока");
             } else {
-                this.player2.setName("Компьютер")
                 console.log("1 игрок");
             }
             
@@ -138,6 +137,7 @@
         var name = null;
         var score = 0;
         var symbol = null;
+        var pc = false;
         
         this.getName = function(symb){
             return name;
@@ -165,12 +165,20 @@
         this.setSymb = function(put_symbol){
             symbol = put_symbol;
         };
+        
+        this.setPc = function(set){
+            pc = set;
+        };
+        
+        this.getPc = function(){
+            return pc;
+        }
     
     }
 
     function Table(){
         this.arrtable = [];
-        this.size = null;
+        this.size = 3;
         
         this.getTable = function(row, col){
             console.log(row, col," ",this.arrtable[parseInt(row)][parseInt(col)]);
@@ -180,6 +188,7 @@
         this.setTable = function(row, col, symbol){
             this.arrtable[parseInt(row)][parseInt(col)] = symbol;
             if(symbol){
+                game.nextStep();
                 game.getWin(row, col, symbol);
             }
         };
@@ -221,7 +230,8 @@
                     getId("playername2").innerHTML = game.player2.getName();
                 } else {
                     // если игра с компьютером
-                    game.player2.setName(null);
+                    game.player2.setPc(true);
+                    game.player2.setName("Компьютер");
                     getId("playername2").innerHTML = "Компьютер";
                 }
                 
@@ -292,7 +302,6 @@
             this.col = event.target.id[2]+event.target.id[3];
             
             if(!game.table.getTable(this.row, this.col)){
-                game.nextStep();
                 htmlControl.setDiv(this.row, this.col, game.getStat());
                 console.log("put");
             }
