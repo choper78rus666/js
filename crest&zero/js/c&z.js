@@ -23,10 +23,18 @@
                 this.str = "Ходит " + this.playerGetNameSymbol(status);
                 htmlControl.gameInfo(this.str);
                 step++;
-               } else {
-                   htmlControl.gameInfo("Победила дружба!");
-                   this.finish();
-               }
+                if(status === -1 && game.player2.getPc()){
+                    //остановили обработчик ходов
+                    htmlControl.getId("table-field").removeEventListener("click", htmlControl.setPosition);
+                } else {
+                    //запустили обработчик ходов
+                    htmlControl.getId("table-field").addEventListener("click", htmlControl.setPosition);
+                }
+                
+            } else {
+               htmlControl.gameInfo("Победила дружба!");
+               this.finish();
+            }
             
         };
         
@@ -52,8 +60,8 @@
             let win = 0;
             for(let i = 0; i < this.table.getSize() ; i++)
                 {
-                    win += symb === this.table.arrtable[i][parseInt(col)] ? symb : win = 0;
-                    console.log("win",win," this.table.arrtable[i, parseInt(col)]",this.table.arrtable[i][ parseInt(col)], " symb ",symb," this.table.getSize() ",parseInt(this.table.getSize()));
+                    win += symb === this.table.arrtable[i][parseInt(col)] ? symb : - win;
+                    console.log("win ",win);
                     if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
                         htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                         this.finish();
@@ -63,8 +71,8 @@
             win = 0;
             for(let i = 0; i < this.table.getSize() ; i++)
                 {
-                    win += symb === this.table.arrtable[parseInt(row)][i] ? symb : win = 0;
-                    console.log("win",win," this.table.arrtable[i, parseInt(col)]",this.table.arrtable[i][ parseInt(col)], " symb ",symb," this.table.getSize() ",parseInt(this.table.getSize()));
+                    win += symb === this.table.arrtable[parseInt(row)][i] ? symb : - win;
+                    console.log("win ",win);
                     if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
                         htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                         this.finish();
@@ -74,7 +82,8 @@
             for(let i = 0; i < 5 ; i++)
                 {   
                     if(parseInt(col)+i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
-                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)+i] ? symb : win = 0;
+                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)+i] ? symb : - win;
+                        console.log("win ",win);
                         if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
@@ -85,7 +94,8 @@
             for(let i = 0; i < 5 ; i++)
                 {   
                     if(parseInt(col)-i >= 0 && parseInt(row)-i >= 0){
-                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)-i] ? symb : win = 0;
+                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)-i] ? symb : - win;
+                        console.log("win ",win);
                         if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
@@ -97,7 +107,8 @@
             for(let i = 0; i < 5 ; i++)
                 {   
                     if(parseInt(col)-i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
-                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)-i] ? symb : win = 0;
+                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)-i] ? symb : - win;
+                        console.log("win ",win);
                         if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
@@ -108,7 +119,8 @@
             for(let i = 0; i < 5 ; i++)
                 {   
                     if(parseInt(col)+i >= 0 && parseInt(row)-i >= 0){
-                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)+i] ? symb : win = 0;
+                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)+i] ? symb : - win;
+                        console.log("win ",win);
                         if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
                             htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
                             this.finish();
@@ -173,8 +185,13 @@
         this.getPc = function(){
             return pc;
         }
+        
+        this.stepPc = function(){
+            
+        }
     
     }
+    
 
     function Table(){
         this.arrtable = [];
@@ -288,11 +305,9 @@
             } else if(symb === 1) {
                 getId(row + col).innerHTML = "X";
                 game.table.setTable(row, col, 1);
-                //game.getWin(row, col, 1);
             } else {
                 getId(row + col).innerHTML = "O";
                 game.table.setTable(row, col, -1);
-                //game.getWin(row, col, -1);
             }
         };
         
@@ -323,9 +338,6 @@
     htmlControl.getId("set-col").addEventListener("mousemove", htmlControl.tableSize);
     htmlControl.getId("set-col").addEventListener("keyup", htmlControl.tableSize);
     htmlControl.getId("set-col").addEventListener("click", htmlControl.tableSize);
-    
-    //обработчик таблицы
-    htmlControl.getId("table-field").addEventListener("click", htmlControl.setPosition);
     
     
 }());
