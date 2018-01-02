@@ -5,6 +5,7 @@
         this.player1 = new Player();
         this.player2 = new Player();
         this.table = new Table();
+        this.playGame = false;
         var status = -1;
         var step = 0;
         
@@ -14,6 +15,14 @@
         
         this.getStat = function(){
             return status;
+        };
+        
+        this.setPlayGame = function(set){
+            this.playGame = set;
+        };
+        
+        this.getPlayGame = function(){
+          return this.playGame;  
         };
         
         this.nextStep = function(){
@@ -48,88 +57,130 @@
             } else {
                 console.log("1 игрок");
             }
-            
+            this.setPlayGame(true);
             this.nextStep();
         };
         
         this.finish = function(){
             htmlControl.getId("table-field").removeEventListener("click", htmlControl.setPosition);
+            this.setPlayGame(false);
         };
         
         this.getWin = function(row, col, symb){
-            let win = 0;
-            for(let i = 0; i < this.table.getSize() ; i++)
+            this.checkLine(row, col, symb);
+            if(this.nextStepForPc[0] === this.table.getSize() - 1 || this.nextStepForPc[0] === 4){
+                htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
+                console.log("Проверка выигрыша",this.nextStepForPc,this.nextStepForPc[0]);
+                this.finish();
+            }
+            console.log("Проверка выигрыша",this.nextStepForPc,this.nextStepForPc[0]);
+        };
+        
+        this.checkLine = function(row, col, symb){
+            row = parseInt(row);
+            col = parseInt(col);
+            console.log("this.table.getSize()",this.table.getSize());
+            var win = 0;
+            var nextStepForPc = [0,0,0];
+            
+            // Проверка линий - логика поиска хода
+            this.testPosition = function(rows, cols){
+                
+                win += symb === this.table.arrtable[rows][cols] ? symb : 0;
+                        console.log(win, symb);
+                        if(!this.table.arrtable[rows][cols]){
+                            if(win){
+                                if(nextStepForPc[0] <= win * symb){
+                                    nextStepForPc = [win * symb, rows, cols];
+                                }
+                            } else if(!nextStepForPc[0]){
+                                    nextStepForPc = [0, rows, cols];
+                                }
+                        } else {
+                            if(win && nextStepForPc[0] < win * symb){
+                                nextStepForPc[0] = win * symb;
+                            }
+                        }
+            };
+            
+            // Проверка вертикаль ++
+            for(let i = 1; i < 5 ; i++)
                 {
-                    win += symb === this.table.arrtable[i][parseInt(col)] ? symb : - win;
-                    console.log("win ",win);
-                    if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
-                        htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
-                        this.finish();
+                    if(row + i < this.table.getSize()){
+                        this.testPosition(row + i, col);
+                        if(this.table.arrtable[row + i][col] !== symb) break;
                     }
                 }
-            
-            win = 0;
-            for(let i = 0; i < this.table.getSize() ; i++)
+            console.log("вертикаль ++",nextStepForPc);
+            // Проверка вертикаль --
+            for(let i = 1; i < 5 ; i++)
                 {
-                    win += symb === this.table.arrtable[parseInt(row)][i] ? symb : - win;
-                    console.log("win ",win);
-                    if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 5 || win === -5){
-                        htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
-                        this.finish();
+                    if(row - i >= 0){
+                        this.testPosition(row - i, col);
+                        if(this.table.arrtable[row - i][col] !== symb) break;
                     }
                 }
             
+            // Проверка горизонталь ++
+            win = 0;
+            console.log("вертикаль --",nextStepForPc);
+            for(let i = 1; i < 5 ; i++)
+                {
+                    if(col + i < this.table.getSize()){
+                        this.testPosition(row, col + i);
+                        if(this.table.arrtable[row][col + i] !== symb) break;
+                    }
+                }
+            console.log("горизонталь ++",nextStepForPc);
+            // Проверка горизонталь --
+            for(let i = 1; i < 5 ; i++)
+                {
+                    if(col - i >= 0){
+                        this.testPosition(row, col - i);
+                        if(this.table.arrtable[row][col - i] !== symb) break;
+                    }
+                }
+            console.log("горизонталь --",nextStepForPc);
+            // Проверка диагональ вниз с лева на право
             win = 0;
             for(let i = 1; i < 5 ; i++)
                 {   
-                    if(parseInt(col)+i < parseInt(this.table.getSize()) && parseInt(row)+i < parseInt(this.table.getSize())){
-                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)+i] ? symb : 0;
-                        console.log("win ",win);
-                        if (this.table.arrtable[parseInt(row)+i][parseInt(col)+i] !== symb) break;
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
-                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
-                            this.finish();
-                        }
+                    if(col + i < this.table.getSize() && row + i < this.table.getSize()){
+                        this.testPosition(row + i, col + i);
+                        if(this.table.arrtable[row + i][col + i] !== symb) break;
                     }
                 }
-            
+            console.log("test4",nextStepForPc);
+            // Проверка диагональ вверх с права на лево
             for(let i = 1; i < 5 ; i++)
                 {   
-                    if(parseInt(col)-i >= 0 && parseInt(row)-i >= 0){
-                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)-i] ? symb : - win;
-                        console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
-                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
-                            this.finish();
-                        }
+                    if(col - i >= 0 && row - i >= 0){
+                        this.testPosition(row - i, col - i);
+                        if (this.table.arrtable[row - i][col - i] !== symb) break;
                     }
                 }
-            
+            console.log("test5",nextStepForPc);
+            // Проверка диагональ вниз с права на лево
             win = 0;
             for(let i = 1; i < 5 ; i++)
                 {   
-                    if(parseInt(col)-i >= 0 && parseInt(row)+i < parseInt(this.table.getSize())){
-                        win += symb === this.table.arrtable[parseInt(row)+i][parseInt(col)-i] ? symb : 0;
-                        if(this.table.arrtable[parseInt(row)+i][parseInt(col)-i] !== symb) break;
-                        console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
-                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
-                            this.finish();
-                        }
+                    if(col - i >= 0 && row + i < this.table.getSize()){
+                        this.testPosition(row + i, col - i);
+                        if(this.table.arrtable[row + i][col - i] !== symb) break;
+                    }
+                }
+            console.log("test6",nextStepForPc);
+            // Проверка диагональ вверх с лева на право
+            for(let i = 1; i < 5 ; i++)
+                {   
+                    if(col + i < this.table.getSize() && row - i >= 0){
+                        this.testPosition(row - i, col + i);
+                        if(this.table.arrtable[row - i][col + i] !== symb) break;
                     }
                 }
             
-            for(let i = 1; i < 5 ; i++)
-                {   
-                    if(parseInt(col)+i < parseInt(this.table.getSize()) && parseInt(row)-i >= 0){
-                        win += symb === this.table.arrtable[parseInt(row)-i][parseInt(col)+i] ? symb : - win;
-                        console.log("win ",win);
-                        if (win === parseInt(this.table.getSize()) || win === -this.table.getSize() || win === 4 || win === -4){
-                            htmlControl.gameInfo("Выиграл " + this.playerGetNameSymbol(symb));
-                            this.finish();
-                        }
-                    }
-                }
+            this.nextStepForPc = nextStepForPc;
+            console.log("test7",nextStepForPc);
         };
         
         // Запуск игры
@@ -145,6 +196,14 @@
         
         this.playerGetNameSymbol = function(symb){
             return (this.player1.getSymb(symb) ? this.player1.getName() : this.player2.getName());
+        };
+        
+        this.stepPc = function(){
+            let row = "" + (this.nextStepForPc[1] < 10 ? "0"+this.nextStepForPc[1] : this.nextStepForPc[1]);
+            let col = "" + (this.nextStepForPc[2] < 10 ? "0"+this.nextStepForPc[2] : this.nextStepForPc[2]);
+            console.log("put",row," ",this.nextStepForPc[1]," ",this.nextStepForPc[2]," ", col);
+            htmlControl.setDiv(row, col, -1);
+            
         };
     }
 
@@ -187,12 +246,8 @@
         
         this.getPc = function(){
             return pc;
-        }
+        };
         
-        this.stepPc = function(){
-            
-        }
-    
     }
     
 
@@ -210,6 +265,9 @@
             if(symbol){
                 game.nextStep();
                 game.getWin(row, col, symbol);
+                if(symbol === 1 && game.player2.getPc() && game.getPlayGame()){
+                    game.stepPc();
+                }
             }
         };
         
@@ -218,7 +276,7 @@
         };
         
         this.getSize = function(){
-            return this.size;
+            return parseInt(this.size);
         }
         
         this.updateField = function(){
