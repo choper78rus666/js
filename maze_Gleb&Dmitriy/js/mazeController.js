@@ -26,6 +26,7 @@ class CanvasDrawer {
             this.canvas_context.drawImage(img, coord[0], coord[1]);
         }
     }
+    
     clear(set){
         // this.canvas_context.fillStyle = '255 255 255 255';
         this.canvas_context.fillStyle = '#FFF';
@@ -42,23 +43,27 @@ class CanvasDrawer {
         // CanvasRenderingContext2D.fillText = "X";
     }
 }
+
 class FieldController extends CanvasDrawer {
     constructor(set_canvas_size) {
         super(set_canvas_size);
         this.field_model = new FieldModel();
         this.sendCoordToModel();
     }
+    
     sendCoordToModel() {
         this.field_model.start = [6, 8];
         this.field_model.finish = [7, 0];
     }
 
 }
+
 class HumanController extends CanvasDrawer{
     constructor(set_canvas_size) {
         super(set_canvas_size);
         this.initListenr();
     }
+    
     initListenr() {
         window.addEventListener('keypress', this.someFunc.bind(this))
     }
@@ -79,6 +84,7 @@ class HumanController extends CanvasDrawer{
             
         }
     }
+    
     someFunc(event) {
         // event.preventDefault();
         console.log(event.keyCode);
@@ -110,4 +116,5 @@ fieldController.generateImage('img/maze.png', [0, 0], 1);
 let human = new HumanController(2);
 human.initGameCanvas('maze_canvas', '2d');
 human.generateImage('img/mouse.png', [444, 11], 2);
-
+// вынес запуск бонусов, т.к setInterval должен запускаться один раз.
+fieldController.field_model.generateSomeBonus();

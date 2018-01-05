@@ -10,6 +10,7 @@ class FieldModel {
         this.event = 0;
         console.log(this);
     }
+    
     humanMove(event){  //нажимаем на кнопку
                         //просматриваем коллизии
                         //смотрим обработчик
@@ -38,12 +39,13 @@ class FieldModel {
             this.coord[0] -=5
         } else {console.log('error')}
         human.generateImage('img/mouse.png', this.coord, 2);
-        if(!this.bonusCoord[0])
-        {this.generateSomeBonus()}
+        //if(!this.bonusCoord[0])
+        //{this.generateSomeBonus()}
         // console.log(event.keyCode);
         // console.log(typeof event.keyCode);
         // console.log(this.coord)
     }
+    
     generateSomeBonus(){
         // iterator caller
         let self = this;
@@ -62,8 +64,9 @@ class FieldModel {
                 self.bonusClear();
                 i = 9;
             }
-        },50000);
+        },5000);
        }
+    
     bonusClear(){
         let set = this.bonusCoord[0];
         fieldController.clear(set);
