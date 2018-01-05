@@ -70,10 +70,10 @@ class HumanController extends CanvasDrawer{
 
     calcCollision(coord, what_need_calc,){ //
         if(what_need_calc === 'human'){
-            let midUp = this.canvas_context.getImageData(coord[0],coord[1]-3,25,1).data;
-            let midRight = this.canvas_context.getImageData(coord[0]+27,coord[1],1,25).data;
-            let midDown = this.canvas_context.getImageData(coord[0],coord[1]+27,25,1).data;
-            let midLeft = this.canvas_context.getImageData(coord[0]-3,coord[1],1,25).data;
+            let midUp = this.canvas_context.getImageData(coord[0],coord[1]-5,24,1).data;
+            let midRight = this.canvas_context.getImageData(coord[0]+29,coord[1],1,24).data;
+            let midDown = this.canvas_context.getImageData(coord[0],coord[1]+29,24,1).data;
+            let midLeft = this.canvas_context.getImageData(coord[0]-3,coord[1],1,24).data;
             fieldController.field_model.stop = [checkCoord(midUp),checkCoord(midRight),checkCoord(midDown),checkCoord(midLeft)];
            // stop = [checkCoord(midUp),checkCoord(midRight),checkCoord(midDown),checkCoord(midLeft)];
             //console.log(stop);
