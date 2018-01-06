@@ -67,37 +67,37 @@ class FieldModel {
     generateSomeBonus(){
         // iterator caller
         let self = this;
-        setInterval(function start(){
+        setInterval(function(){
             if(self.bonusCoord.length < 20){
                     let coord = [parseInt(Math.random()*966),parseInt(Math.random()*966)];
                     human.calcCollision(coord, 'bonus');
                     if(self.bonusCollision === false){
-                        //console.log('Наши координаты бонуса',coord);
+                        console.log('Наши координаты бонуса',coord,self.bonusCoord.length);
                         human.generateImage('img/bonus.png',coord,3); //TODO: создать class bonus
                         self.bonusCoord.push(coord); // TODO: раскидать на методы 1 метод одно действие
                     } else {
                         self.bonusCollision = false;
-                        start();
                     }
             } else {
-                self.bonusClear();
+                self.bonusClear(0);
             }
-        },5000);
+        },1000);
        }
     
-    bonusClear(ind=0){
+    bonusClear(ind){
         let set = this.bonusCoord[ind];
-        this.bonusCoord.shift();
+        this.bonusCoord.splice(ind,1);
         fieldController.clear(set);
         
     }
 
     bonusScore(){
         for(let i = 0; i < this.bonusCoord.length; i++){
-            if(this.bonusCoord[i][0] > this.coord[0] - 50 && this.bonusCoord[i][0] < this.coord[0] + 50 && this.bonusCoord[i][1] > this.coord[1] - 50 && this.bonusCoord[i][1] < this.coord[1] + 50){
+            if(this.bonusCoord[i][0] > this.coord[0] - 30 && this.bonusCoord[i][0] < this.coord[0] + 30 && this.bonusCoord[i][1] > this.coord[1] - 30 && this.bonusCoord[i][1] < this.coord[1] + 30){
                 this.bonusClear(i);
                 this.score += 100;
                 console.log("Получили бонус!!! Score: ", this.score);
+                break;
             }
         }
     }
