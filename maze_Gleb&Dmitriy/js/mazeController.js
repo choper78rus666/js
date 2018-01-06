@@ -73,10 +73,8 @@ class HumanController extends CanvasDrawer{
             let midUp = this.canvas_context.getImageData(coord[0],coord[1]-5,24,1).data;
             let midRight = this.canvas_context.getImageData(coord[0]+29,coord[1],1,24).data;
             let midDown = this.canvas_context.getImageData(coord[0],coord[1]+29,24,1).data;
-            let midLeft = this.canvas_context.getImageData(coord[0]-3,coord[1],1,24).data;
+            let midLeft = this.canvas_context.getImageData(coord[0]-4,coord[1],1,24).data;
             fieldController.field_model.stop = [checkCoord(midUp),checkCoord(midRight),checkCoord(midDown),checkCoord(midLeft)];
-           // stop = [checkCoord(midUp),checkCoord(midRight),checkCoord(midDown),checkCoord(midLeft)];
-            //console.log(stop);
             
             // let black = humanData.prototype.entries([0],255);
             //console.log("Левый угол верх",midUp[0],'Альфа',midUp[3],'Правый верх угол',midRight[0],'Альфа',midRight[3],"Правый угол низ",midDown[0],'Альфа',midDown[3],'Левый угол Низ',midLeft[0],'Альфа', midLeft[3]);
