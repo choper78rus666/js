@@ -67,7 +67,7 @@ class FieldModel {
     generateSomeBonus(){
         // iterator caller
         let self = this;
-        setInterval(function(){
+        setInterval(function start(){
             if(self.bonusCoord.length < 20){
                     let coord = [parseInt(Math.random()*966),parseInt(Math.random()*966)];
                     human.calcCollision(coord, 'bonus');
@@ -77,11 +77,12 @@ class FieldModel {
                         self.bonusCoord.push(coord); // TODO: раскидать на методы 1 метод одно действие
                     } else {
                         self.bonusCollision = false;
+                        start();
                     }
             } else {
                 self.bonusClear(0);
             }
-        },1000);
+        },5000);
        }
     
     bonusClear(ind){
